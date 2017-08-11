@@ -3,6 +3,7 @@
  * Copyright (C) 2012 by Steve Markgraf <steve@steve-m.de>
  * Copyright (C) 2012 by Hoernchen <la@tfc-server.de>
  * Copyright (C) 2012 by Kyle Keen <keenerd@gmail.com>
+ * Copyright (C) 2017 by Kenneth Wilhelmsen <kenneth@wilhelmsen.nu>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -175,7 +176,7 @@ void usage(void)
 		"\n"
 		"Experimental options:\n"
 		"\t[-w window (default: rectangle)]\n"
-		"\t  hamming, blackman, blackman-harris, hann-poisson, bartlett, youssef\n"
+		"\t  hamming, blackman, blackman-harris, hann-poisson, bartlett, youssef, flattop\n"
 		// kaiser
 		"\t[-c crop_percent (default: 0%% suggested: 20%%)]\n"
 		"\t  discards data at the edges, 100%% discards everything\n"
@@ -458,6 +459,20 @@ double bartlett(int i, int length)
 	if (w < 0) {
 		w = -w;}
 	w = 1 - w;
+	return w;
+}
+
+/* http://zone.ni.com/reference/en-XX/help/372058N-01/rfsapropref/pnirfsa_spectrum.fftwindowtype/ */
+double flat_top(int i, int length)
+{
+	double a0, a1, a2, a3, a4, w, N1;
+	a0 = 0.215578948;
+	a1 = 0.41663158;
+	a2 = 0.277263158;
+	a3 = 0.083578947;
+	a4 = 0.006947368;
+	N1 = (double)(length-1);
+	w = a0 - a1*cos(2*i*M_PI/N1) + a2*cos(4*i*M_PI/N1) - a3*cos(6*i*M_PI/N1) + a4*cos(8*i*M_PI/N1);
 	return w;
 }
 
@@ -1096,6 +1111,8 @@ int main(int argc, char **argv)
 				ms.window_fn = kaiser;}
 			if (strcmp("bartlett",  optarg) == 0) {
 				ms.window_fn = bartlett;}
+			if (strcmp("flattop",  optarg) == 0) {
+				ms.window_fn = flat_top;}
 			break;
 		case 't':
 			fft_threads = atoi(optarg);
