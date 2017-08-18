@@ -462,8 +462,8 @@ double bartlett(int i, int length)
 	return w;
 }
 
-/* http://zone.ni.com/reference/en-XX/help/372058N-01/rfsapropref/pnirfsa_spectrum.fftwindowtype/ */
 double flat_top(int i, int length)
+/* http://zone.ni.com/reference/en-XX/help/372058N-01/rfsapropref/pnirfsa_spectrum.fftwindowtype/ */
 {
 	double a0, a1, a2, a3, a4, w, N1;
 	a0 = 0.215578948;
