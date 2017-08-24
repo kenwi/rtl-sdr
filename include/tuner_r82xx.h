@@ -42,6 +42,10 @@
 
 #define VER_NUM			49
 
+/* R820T Clock */
+#define CALIBRATION_LO 88000
+
+
 enum r82xx_chip {
 	CHIP_R820T,
 	CHIP_R620D,
@@ -82,7 +86,11 @@ struct r82xx_priv {
 	uint16_t			pll;	/* kHz */
 	uint32_t			int_freq;
 	uint8_t				fil_cal_code;
+	uint8_t				filt;
+	uint8_t				hpf;
 	uint8_t				input;
+	uint32_t			freq;
+	int				has_lock;
 	int				init_done;
 	int				disable_dither;
 	int				reg_cache;
